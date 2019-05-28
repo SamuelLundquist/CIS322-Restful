@@ -7,7 +7,7 @@
         <h1>List of laptops</h1>
         <ul>
             <?php
-            $json = file_get_contents('http://laptop-service/');
+            $json = file_get_contents('http://laptop-service:5000/');
             $obj = json_decode($json);
 	          $laptops = $obj->Laptops;
             foreach ($laptops as $l) {

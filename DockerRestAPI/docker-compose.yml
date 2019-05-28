@@ -1,17 +1,17 @@
-version: '3'  # version of compose format 
+version: '3'  # version of compose format
 
 services:
   laptop-service:
-    build: ./laptop  
+    build: ./laptop
     volumes:
-      - ./laptop:/usr/src/app 
+      - ./laptop:/usr/src/app
     ports:
-      - 5001:80  # host:container
+      - 5001:5000  # host:container
 
   website:
-    image: php:apache  
+    image: php:apache
     volumes:
-      - ./website:/var/www/html 
+      - ./website:/var/www/html
     ports:
       - 5000:80  # host:container
     depends_on:

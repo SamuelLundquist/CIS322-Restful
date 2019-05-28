@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Laptop Service
 
 from flask import Flask
@@ -10,7 +11,7 @@ api = Api(app)
 class Laptop(Resource):
     def get(self):
         return {
-            'Laptops': ['Mac OS', 'Dell', 
+            'Laptops': ['Mac OS', 'Dell',
             'Windozzee',
 	    'Yet another laptop!',
 	    'Yet yet another laptop!'
@@ -23,4 +24,4 @@ api.add_resource(Laptop, '/')
 
 # Run the application
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', debug=True)
