@@ -1,0 +1,24 @@
+<html>
+
+	<head>
+
+  		<title>Display Times</title>
+  		<link rel="stylesheet" href="/static/css/display.css"/>
+
+	</head>
+
+	<body>
+		<div id=title>Brevet Times</div>
+		<div id='times'>
+			{% for time in times %}
+			<div class='time'>
+  				<div class='titleline'>{{ time.nm }} {{ time.dist }}km</div>
+  				<div class='line'>Opens: {{ time.op }}</div>
+ 				<div class='line'>Closes: {{ time.cl }}</div>
+			</div>
+			{% endfor %}
+		</div>
+
+	</body>
+
+</html>

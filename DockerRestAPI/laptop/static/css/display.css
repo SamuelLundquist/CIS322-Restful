@@ -1,0 +1,51 @@
+body
+{
+	margin:0;
+	padding:0;
+	width: 100%;
+	height: auto;
+	background-color: rgb(50,50,50);
+}
+
+#times
+{
+	margin-top: 140px;
+	width: 100%;
+	height: auto;
+}
+
+.time
+{
+	width: 300px;
+	padding: 20px;
+	height: auto;
+	margin: 40px auto;
+	background-color: white;
+	border-radius: 5px;
+}
+
+.titleline
+{
+	color: rgb(53, 80, 122);
+	font-size: 20px;
+	text-align: center;
+	padding: 5px;
+}
+
+.line
+{
+	width: 100%;
+	text-align:center;
+}
+
+#title
+{
+	top: 0;
+	position: fixed;
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	font-size: 30px;
+	color: rgb(53, 80, 122);
+	background-color:white;
+}
