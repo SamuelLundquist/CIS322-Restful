@@ -2,69 +2,83 @@
 
 Simple listing service from project 5 stored in MongoDB database.
 
-## What is in this repository
+## ACP controle times
 
-You have a minimal implementation of Docker compose in DockerRestAPI folder, using which you can create REST API-based services (as demonstrated in class). 
+Controls are points where a rider must obtain proof of passage, and control times are the minimum and maximum times by which the rider must arrive at the location.
 
-## Recap 
+The algorithm for calculating controle times is described here (https://rusa.org/pages/acp-brevet-control-times-calculator).
 
-You will reuse *your* code from project 5 (https://bitbucket.org/UOCIS322/proj5-mongo). Recall: you created the following functionalities. 1) Two buttons ("Submit") and ("Display") in the page where you have controle times. 2) On clicking the Submit button, the control times were be entered into the database. 3) On clicking the Display button, the entries from the database were be displayed in a new page. You also handled error cases appropriately. 
+Additional background information is given here (https://rusa.org/pages/rulesForRiders).  
 
-## Functionality you will add
+This is a replacement of the calculator here (https://rusa.org/octime_acp.html).
 
-This project has following four parts. Change the values for host and port according to your machine, and use the web browser to check the results.
+## AJAX Flask and Mongo implementation
 
-* You will design RESTful service to expose what is stored in MongoDB. Specifically, you'll use the boilerplate given in DockerRestAPI folder, and create the following three basic APIs:
+This code fills in times as the input fields are filled using Ajax and Flask.
+
+Each time a distance is filled in, the corresponding open and close times are filled in with Ajax.
+
+The submit button is then used to store valid control times in a mongodb database, making sure not to add duplicates. This database can be accessed and viewed on a separate page by clicking the display button.
+
+## New Functionalities
+
+This project adds the following four parts to project 5:
+
+* RESTful service to expose what is stored in MongoDB. Specifically the following three basic APIs:
     * "http://<host:port>/listAll" should return all open and close times in the database
     * "http://<host:port>/listOpenOnly" should return open times only
     * "http://<host:port>/listCloseOnly" should return close times only
 
-* You will also design two different representations: one in csv and one in json. For the above, JSON should be your default representation for the above three basic APIs. 
+* Two different representations: one in csv and one in json. JSON is the default representation for the above three basic APIs.
     * "http://<host:port>/listAll/csv" should return all open and close times in CSV format
     * "http://<host:port>/listOpenOnly/csv" should return open times only in CSV format
     * "http://<host:port>/listCloseOnly/csv" should return close times only in CSV format
-
     * "http://<host:port>/listAll/json" should return all open and close times in JSON format
     * "http://<host:port>/listOpenOnly/json" should return open times only in JSON format
     * "http://<host:port>/listCloseOnly/json" should return close times only in JSON format
 
-* You will also add a query parameter to get top "k" open and close times. For examples, see below.
+* A query parameter to get top "k" open and close times.
 
-    * "http://<host:port>/listOpenOnly/csv?top=3" should return top 3 open times only (in ascending order) in CSV format 
+    * "http://<host:port>/listOpenOnly/csv?top=3" should return top 3 open times only (in ascending order) in CSV format
     * "http://<host:port>/listOpenOnly/json?top=5" should return top 5 open times only (in ascending order) in JSON format
     * "http://<host:port>/listCloseOnly/csv?top=6" should return top 5 close times only (in ascending order) in CSV format
     * "http://<host:port>/listCloseOnly/json?top=4" should return top 4 close times only (in ascending order) in JSON format
 
-* You'll also design consumer programs (e.g., in jQuery) to use the service that you expose. "website" inside DockerRestAPI is an example of that. It is uses PHP. You're welcome to use either PHP or jQuery to consume your services. NOTE: your consumer program should be in a different container like example in DockerRestAPI.
+* A consumer program to use the services above using PHP. The program is in the "website" container.
 
-## Tasks
+## Testing
 
-You'll turn in your credentials.ini using which we will get the following:
+To run the server, change to the DockerMongo directory and type:
 
-* The working application with three parts.
+- $ sudo make
 
-* Dockerfile
+To exit the server hit:
 
-* docker-compose.yml
+- ctrl c
 
-## Grading Rubric
+After closing the server, remove everything made by up:
 
-* If your code works as expected: 100 points. This includes:
-    * Basic APIs work as expected.
-    * Representations work as expected.
-    * Query parameter-based APIs work as expected.
-    * Consumer program works as expected. 
+- $ sudo make down
 
-* For each non-working API, 5 points will be docked off. If none of them work,
-  you'll get 35 points assuming
-    * README is updated with your name and email ID.
-    * The credentials.ini is submitted with the correct URL of your repo.
-    * Dockerfile is present. 
-    * Docker-compose.yml works/builds without any errors.
+To remove docker images and containers:
 
-* If README is not updated, 5 points will be docked off. 
+- $ sudo make prune
 
-* If the Docker-compose.yml doesn't build or is missing, 15 points will be
-  docked off. Same for Dockerfile as well.
+### Notes:
 
-* If credentials.ini is missing, 0 will be assigned.
+Keep in mind that you will need docker and docker-compose installed on your local machine.
+
+If you hit the display button, the values are removed from the db and will not show up on localhost:5000 until submitted again. This was to prevent the database from keeping old values when the user submits new ones, but could be an issue depending on what you expect from the functionality.
+
+The MongoClient settings in flask_brevets.py are hardcoded to a specific IP. I could not get the program to work otherwise. If this does not work on your local machine, I would suggest changing line 20.
+From:
+client = MongoClient("172.20.0.2", 27017)
+To:
+client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
+
+- To access the brevets calculator, go to localhost:5001
+- To access the "website" (consumer program) go to localhost:5000
+
+## Authors
+
+####Samuel Lundquist - slundqui@uoregon.edu

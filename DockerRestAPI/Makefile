@@ -1,6 +1,6 @@
-.PHONY: install start stop prune
+.PHONY: up down prune
 
-up: Dockerfile
+up:
 	sudo docker-compose up
 
 down:
