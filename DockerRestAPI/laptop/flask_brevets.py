@@ -17,7 +17,7 @@ import os
 ###
 app = Flask(__name__)
 api = Api(app)
-client = MongoClient(os.environ["DB_PORT_27017_TCP_ADDR"], 27017)
+client = MongoClient("172.20.0.2", 27017)
 db = client.brevetsdb
 
 ###
@@ -103,17 +103,143 @@ def forbidden_request(error):
 ###
 # Api
 ###
-class Laptop(Resource):
+class listAll(Resource):
     def get(self):
-        return {
-            'Laptops': ['Mac OS', 'Dell',
-            'Windozzee',
-	    'Yet another laptop!',
-	    'Yet yet another laptop!'
-            ]
-        }
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        time_array = []
+        for item in times:
+            time_array.append("Open: " + item["op"] + " Close: " + item["cl"])
 
-api.add_resource(Laptop, '/')
+        return { 'Times' : time_array}
+
+class listAllj(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        time_array = []
+        for item in times:
+            time_array.append("Open: " + item["op"] + " Close: " + item["cl"])
+
+        return { 'Times' : time_array}
+
+class listAllc(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        all = ""
+        for item in times:
+            all += "Open: " + item["op"] + " Close: " + item["cl"] +","
+        all = all[:-1]
+        return all
+
+class listOpenOnly(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        open_time_array = []
+        for item in times:
+            open_time_array.append(item["op"])
+        return { 'openTime' : open_time_array}
+
+class listOpenOnlyj(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        open_time_array = []
+        for item in times:
+            open_time_array.append(item["op"])
+        return { 'openTime' : open_time_array}
+
+class listOpenOnlyJTopFive(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().limit(5)
+        times = [time for time in _times]
+        open_time_array = []
+        for item in times:
+            open_time_array.append(item["op"])
+        return { 'openTime' : open_time_array}
+
+class listOpenOnlyc(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        opentimes = ""
+        for item in times:
+            opentimes += item["op"] + ","
+        opentimes = opentimes[:-1]
+        return opentimes
+
+class listOpenOnlyCTopThree(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1).limit(3)
+        times = [time for time in _times]
+        opentimes = ""
+        for item in times:
+            opentimes += item["op"] + ","
+        opentimes = opentimes[:-1]
+        return opentimes
+
+class listCloseOnly(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        close_time_array = []
+        for item in times:
+            close_time_array.append(item["cl"])
+        return { 'closeTime' : close_time_array}
+
+class listCloseOnlyj(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        close_time_array = []
+        for item in times:
+            close_time_array.append(item["cl"])
+        return { 'closeTime' : close_time_array}
+
+class listCloseOnlyJTopFour(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1).limit(4)
+        times = [time for time in _times]
+        close_time_array = []
+        for item in times:
+            close_time_array.append(item["cl"])
+        return { 'closeTime' : close_time_array}
+
+class listCloseOnlyc(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1)
+        times = [time for time in _times]
+        closetimes = ""
+        for item in times:
+            closetimes += item["cl"] + ","
+        closetimes = closetimes[:-1]
+        return closetimes
+
+class listCloseOnlyCTopSix(Resource):
+    def get(self):
+        _times = db.brevetsdb.find().sort( "dist", 1).limit(6)
+        times = [time for time in _times]
+        closetimes = ""
+        for item in times:
+            closetimes += item["cl"] + ","
+        closetimes = closetimes[:-1]
+        return closetimes
+
+api.add_resource(listAll, '/listAll')
+api.add_resource(listAllj, '/listAll/json')
+api.add_resource(listAllc, '/listAll/csv')
+api.add_resource(listOpenOnly, '/listOpenOnly')
+api.add_resource(listOpenOnlyj, '/listOpenOnly/json')
+api.add_resource(listOpenOnlyJTopFive, '/listOpenOnly/json?top=5')
+api.add_resource(listOpenOnlyc, '/listOpenOnly/csv')
+api.add_resource(listOpenOnlyCTopThree, '/listOpenOnly/csv?top=3')
+api.add_resource(listCloseOnly, '/listCloseOnly')
+api.add_resource(listCloseOnlyj, '/listCloseOnly/json')
+api.add_resource(listCloseOnlyJTopFour, '/listCloseOnly/json?top=4')
+api.add_resource(listCloseOnlyc, '/listCloseOnly/csv')
+api.add_resource(listCloseOnlyCTopSix, '/listCloseOnly/csv?top=6')
 
 ###############
 

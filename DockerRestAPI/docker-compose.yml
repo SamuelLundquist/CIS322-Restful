@@ -3,8 +3,9 @@ version: '3'  # version of compose format
 services:
   laptop-service:
     build: ./laptop
+    command: python -u flask_brevets.py
     volumes:
-      - ./laptop:/usr/src/app
+      - ./laptop:/brevets
     ports:
       - 5001:5000  # host:container
     links:
@@ -18,8 +19,6 @@ services:
       - 5000:80  # host:container
     depends_on:
       - laptop-service  # website is not going to work unless laptop-service is running
-    links:
-      - db
 
   db:
     image: mongo:3.0.2

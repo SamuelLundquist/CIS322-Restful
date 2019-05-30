@@ -1,3 +1,4 @@
-FROM python:3-onbuild
-COPY . /usr/src/app
-CMD ["python", "flask_brevets.py"]
+FROM python:3
+ADD . /brevets
+WORKDIR /brevets
+RUN pip install -r requirements.txt
