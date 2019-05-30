@@ -48,7 +48,7 @@ This project adds the following four parts to project 5:
 
 ## Testing
 
-To run the server, change to the DockerMongo directory and type:
+To run the server, change to the DockerRestAPI directory and type:
 
 - $ sudo make
 
